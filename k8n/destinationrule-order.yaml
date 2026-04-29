@@ -1,0 +1,10 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: order-service-destination
+  namespace: default
+spec:
+  host: order-service
+  trafficPolicy:
+    tls:
+      mode: DISABLE

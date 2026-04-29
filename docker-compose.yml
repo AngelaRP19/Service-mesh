@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # ====================
+  # MYSQL DATABASES
+  # ====================
+  
+  mysql-order:
+    image: mysql:8.0
+    container_name: mysql-order
+    environment:
+      MYSQL_ROOT_PASSWORD: uptc2026
+      MYSQL_DATABASE: order_db
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - order_data:/var/lib/mysql
+    networks:
+      - service-mesh-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+
+  mysql-customer:
+    image: mysql:8.0
+    container_name: mysql-customer
+    environment:
+      MYSQL_ROOT_PASSWORD: uptc2026
+      MYSQL_DATABASE: customer_db
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3307:3306"
+    volumes:
+      - customer_data:/var/lib/mysql
+    networks:
+      - service-mesh-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+
+  mysql-login:
+    image: mysql:8.0
+    container_name: mysql-login
+    environment:
+      MYSQL_ROOT_PASSWORD: uptc2026
+      MYSQL_DATABASE: login_db
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3308:3306"
+    volumes:
+      - login_data:/var/lib/mysql
+    networks:
+      - service-mesh-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+
+volumes:
+  order_data:
+  customer_data:
+  login_data:
+
+networks:
+  service-mesh-network:
+    driver: bridge
