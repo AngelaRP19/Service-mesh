@@ -20,7 +20,7 @@ spec:
         - containerPort: 8081
         env:
         - name: SPRING_DATASOURCE_URL
-          value: "jdbc:mysql://mysql-customer:3306/customer_db"
+          value: "jdbc:mysql://mysql-customer:3306/customer_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT-5"
         - name: SPRING_DATASOURCE_USERNAME
           value: "root"
         - name: SPRING_DATASOURCE_PASSWORD
