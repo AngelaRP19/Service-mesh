@@ -11,10 +11,19 @@ spec:
     metadata:
       labels:
         app: order-service
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: order-service
         image: order-service:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 8080
+        - containerPort: 8083
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://mysql-order:3306/order_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT-5"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "root"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "uptc2026"
