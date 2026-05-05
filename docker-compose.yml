@@ -99,6 +99,21 @@ services:
     networks:
       - service-mesh-network
 
+  order-service:
+    build: ./order
+    container_name: order-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-order:3306/order_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT-5"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: uptc2026
+    depends_on:
+      mysql-order:
+        condition: service_healthy
+    networks:
+      - service-mesh-network
+
 volumes:
   order_data:
   customer_data:

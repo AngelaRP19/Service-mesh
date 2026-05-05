@@ -3,6 +3,7 @@ package uptc.edu.swii.login.service;
 import uptc.edu.swii.login.model.Login;
 import uptc.edu.swii.login.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public class LoginService {
 
     @Autowired
     private LoginRepository loginRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Login> findAll() {
         return loginRepository.findAll();
@@ -28,6 +32,7 @@ public class LoginService {
 
     public Login save(Login login){
         login.setId(null);
+        login.setPassword(passwordEncoder.encode(login.getPassword()));
         return loginRepository.save(login);
     }
 
@@ -36,7 +41,7 @@ public class LoginService {
         if (optional.isPresent()) {
             Login existingLogin = optional.get();
             existingLogin.setCustomerid(loginDetails.getCustomerid());
-            existingLogin.setPassword(loginDetails.getPassword());
+            existingLogin.setPassword(passwordEncoder.encode(loginDetails.getPassword()));
             return loginRepository.save(existingLogin);
         }
         return null;
@@ -52,7 +57,7 @@ public class LoginService {
 
     public boolean auth(String customerid, String password){
         Login login = findByCustomerId(customerid);
-        if(login != null && login.getPassword().equals(password)){
+        if(login != null && passwordEncoder.matches(password, login.getPassword())){
             return true;
         }
         return false;
