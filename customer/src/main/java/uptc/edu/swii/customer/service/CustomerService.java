@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import uptc.edu.swii.customer.client.LoginClient;
 import uptc.edu.swii.customer.dto.CustomerRequest;
 import uptc.edu.swii.customer.model.Customer;
 import uptc.edu.swii.customer.repository.CustomerRepository;
@@ -15,6 +16,9 @@ public class CustomerService {
     
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private LoginClient loginClient;
 
     public List<Customer> findAll() {
         return customerRepository.findAll();
@@ -33,7 +37,9 @@ public class CustomerService {
                 customerRequest.getPhone(), 
                 customerRequest.getEmail()
         );
-        return customerRepository.save(customer);
+        Customer savedCustomer = customerRepository.save(customer);
+        loginClient.registerLogin(customerRequest.getDocument(), customerRequest.getPassword());
+        return savedCustomer;
     }
 
     public Customer update(String document, CustomerRequest customerRequest) {
