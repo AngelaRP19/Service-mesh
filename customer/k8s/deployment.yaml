@@ -11,6 +11,8 @@ spec:
     metadata:
       labels:
         app: customer-service
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: customer-service
@@ -25,3 +27,5 @@ spec:
           value: "root"
         - name: SPRING_DATASOURCE_PASSWORD
           value: "uptc2026"
+        - name: LOGIN_SERVICE_URL
+          value: "http://login-service:8082"
